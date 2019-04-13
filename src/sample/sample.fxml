@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="600" prefWidth="600" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <top>
+      <VBox prefHeight="52.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <MenuBar>
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                        <MenuItem mnemonicParsing="false" onAction="#onLoadImage" text="Load Image" />
+                        <MenuItem mnemonicParsing="false" onAction="#onSaveImage" text="Save" />
+                         <MenuItem mnemonicParsing="false" onAction="#onSaveImageAs" text="Save As" />
+                         <MenuItem mnemonicParsing="false" onAction="#onExit" text="Exit" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#onAbout" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+             <HBox prefHeight="26.0" prefWidth="300.0">
+                 <TextField fx:id="brushsize" />
+                 <ColorPicker fx:id="colorpicker" />
+               <RadioButton fx:id="pen" mnemonicParsing="false" onAction="#onPenClick" text="pen" />
+               <RadioButton fx:id="eraser" mnemonicParsing="false" onAction="#onEraserClick" text="eraser" />
+             </HBox>
+         </children>
+      </VBox>
+   </top>
+    <center>
+        <Canvas fx:id="canvas" height="600" width="600" />
+    </center>
+</BorderPane>
