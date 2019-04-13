@@ -5,6 +5,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.RadioButton;
@@ -13,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import javax.imageio.ImageIO;
@@ -31,16 +33,22 @@ public class Controller implements Initializable
 
    public TextField brushsize;
 
+   //tools
     public RadioButton pen,eraser;
-
+    //paint canvas
     public Canvas canvas;
 
         //not done Load image to canvas
         public  void onLoadImage(ActionEvent e) throws IOException {
             FileChooser filechooser=new FileChooser();
+            filechooser.setTitle("Load image");
+            filechooser.setInitialDirectory(new File("C:\\Users\\Bassel\\Desktop"));
+            //get the file
             File infile=filechooser.showOpenDialog(null);
             Image img=SwingFXUtils.toFXImage(ImageIO.read(infile), null);
-            //canvas.;
+            canvas.setHeight(img.getHeight());
+            canvas.setWidth(img.getWidth());
+            canvas.getGraphicsContext2D().drawImage(img,0,0,img.getWidth(),img.getHeight());
         }
     public void onSaveImageAs(ActionEvent event){
         try{
@@ -89,7 +97,8 @@ public class Controller implements Initializable
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //the paint happen
+
+            //the paint happen
         GraphicsContext g=canvas.getGraphicsContext2D();
 
         //always this is working

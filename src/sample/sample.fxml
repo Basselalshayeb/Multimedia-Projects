@@ -11,7 +11,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600" prefWidth="600" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<?import javafx.scene.control.ScrollPane?>
+<BorderPane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <top>
       <VBox prefHeight="52.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -42,6 +43,8 @@
       </VBox>
    </top>
     <center>
-        <Canvas fx:id="canvas" height="600" width="600" />
+        <ScrollPane>
+        <Canvas fx:id="canvas" height="600" width="600"/>
+        </ScrollPane>
     </center>
 </BorderPane>
