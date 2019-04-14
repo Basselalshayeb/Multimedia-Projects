@@ -44,7 +44,7 @@ public class Controller implements Initializable
     public RadioButton pen,eraser;
 
     //max width and height
-    Double maxwidth,maxheight;
+    Double maxwidth=0.0,maxheight=0.0;
 
     private Vector<Canvas> canvss=new Vector<Canvas>();
 
@@ -89,12 +89,14 @@ public class Controller implements Initializable
             Image img=SwingFXUtils.toFXImage(ImageIO.read(infile), null);
             //here should define the transparency for the new layer
             //open new window using fxml and get the transparency
+            double trans=EnterTransparency.getAnswer();
             //append the layer
             maxheight=Math.max(maxheight,img.getHeight());
             maxwidth=Math.max(maxwidth,img.getWidth());
             Canvas layer=new Canvas();
             layer.setWidth(maxwidth);
             layer.setHeight(maxheight);
+            layer.getGraphicsContext2D().setGlobalAlpha(trans);
             layer.getGraphicsContext2D().drawImage(img,0,0,img.getWidth(),img.getHeight());
             canvss.add(layer);
             //add the new layer to the layers
