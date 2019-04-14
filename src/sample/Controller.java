@@ -3,6 +3,7 @@ package sample;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -78,15 +79,17 @@ public class Controller implements Initializable
             canvss.elementAt(1).toFront();
 
             //add the listener
-            canvss.elementAt(1).setOnMouseDragged(e ->mouseListinerForPaint(e));
+            canvss.elementAt(1).setOnMouseDragged(this::mouseListinerForPaint);
         }
         public void onAddAnotherLayer(ActionEvent e) throws IOException {
             FileChooser filechooser=new FileChooser();
             filechooser.setTitle("Load the new layer image");
-            //get the file
+            //get the new layer file
             File infile=filechooser.showOpenDialog(null);
             Image img=SwingFXUtils.toFXImage(ImageIO.read(infile), null);
             //here should define the transparency for the new layer
+            //open new window using fxml and get the transparency
+            //append the layer
             maxheight=Math.max(maxheight,img.getHeight());
             maxwidth=Math.max(maxwidth,img.getWidth());
             Canvas layer=new Canvas();
@@ -103,7 +106,7 @@ public class Controller implements Initializable
             paintinglayer.setWidth(maxwidth);
             p.getChildren().add(paintinglayer);
             paintinglayer.toFront();
-            paintinglayer.setOnMouseDragged(me->mouseListinerForPaint(me));
+            paintinglayer.setOnMouseDragged(this::mouseListinerForPaint);
             //replace the scrollpane
             scrollpane.setContent(p);
         }
@@ -122,12 +125,9 @@ public class Controller implements Initializable
             //now paint mouser pos + size to make rectangle
             if(eraser.isSelected()){
                 g.clearRect(x,y,size,size);
-
             }else if(pen.isSelected()){
                 g.setFill(colorpicker.getValue());
-                //rounded rect become full round in the end
-                // g.fillRoundRect(x, y, size, size, 100, 100);
-                g.fillRect(x,y,size,size);
+                g.fillOval(x,y,size,size);
             }else{
                 //nothing happen
             }
@@ -136,15 +136,15 @@ public class Controller implements Initializable
     public void onSaveImageAs(ActionEvent event){
         try{
             //1- get the image from all the canvases
-            //testing
            Canvas res=new Canvas();
+           res.setWidth(maxwidth);
+           res.setHeight(maxheight);
            for(int i=0;i<canvss.size();i++) {
                //get the image
-               Image img=canvss.elementAt(i).snapshot(null,null);
-               //set the maximum scale for the new canvas
-               res.setHeight(Math.max(res.getHeight(),img.getHeight()));
-               res.setWidth(Math.max(res.getWidth(),img.getWidth()));
-               res.getGraphicsContext2D().drawImage(img,0,0 ,img.getWidth() ,img.getHeight());
+               SnapshotParameters params = new SnapshotParameters();
+               params.setFill(Color.TRANSPARENT);
+               Image img=canvss.elementAt(i).snapshot(params,null);
+               res.getGraphicsContext2D().drawImage(img,0,0 );
            }
             Image paintedimg=res.snapshot(null,null);
             //2- get the save location
@@ -162,13 +162,14 @@ public class Controller implements Initializable
         try{
             //1- merge all the canvas
             Canvas res=new Canvas();
+            res.setWidth(maxwidth);
+            res.setHeight(maxheight);
             for(int i=0;i<canvss.size();i++) {
                 //get the image
-                Image img=canvss.elementAt(i).snapshot(null,null);
-                //set the maximum scale for the new canvas
-                res.setHeight(Math.max(res.getHeight(),img.getHeight()));
-                res.setWidth(Math.max(res.getWidth(),img.getWidth()));
-                res.getGraphicsContext2D().drawImage(img,0,0 ,img.getWidth() ,img.getHeight());
+                SnapshotParameters params = new SnapshotParameters();
+                params.setFill(Color.TRANSPARENT);
+                Image img=canvss.elementAt(i).snapshot(params,null);
+                res.getGraphicsContext2D().drawImage(img,0,0 );
             }
             //2- put in paint
             Image paintedimg=res.snapshot(null,null);
