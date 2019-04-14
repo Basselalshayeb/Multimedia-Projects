@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import javafx.scene.control.ScrollPane?>
-<BorderPane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<BorderPane  xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <top>
       <VBox prefHeight="52.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -21,7 +21,8 @@
                 <Menu mnemonicParsing="false" text="File">
                   <items>
                         <MenuItem mnemonicParsing="false" onAction="#onLoadImage" text="Load Image" />
-                        <MenuItem mnemonicParsing="false" onAction="#onSaveImage" text="Save" />
+                      <MenuItem mnemonicParsing="false" onAction="#onAddAnotherLayer" text="Add Another Layer" />
+                      <MenuItem mnemonicParsing="false" onAction="#onSaveImage" text="Save" />
                          <MenuItem mnemonicParsing="false" onAction="#onSaveImageAs" text="Save As" />
                          <MenuItem mnemonicParsing="false" onAction="#onExit" text="Exit" />
                   </items>
@@ -43,8 +44,9 @@
       </VBox>
    </top>
     <center>
-        <ScrollPane>
-        <Canvas fx:id="canvas" height="600" width="600"/>
+        <ScrollPane fx:id="scrollpane">
+        <!--here we will add the canvass-->
+
         </ScrollPane>
     </center>
 </BorderPane>
