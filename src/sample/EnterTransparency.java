@@ -25,6 +25,7 @@ public class EnterTransparency {
         Slider slider=new Slider();
         slider.setMin(0);slider.setMax(1);slider.setValue(1);
         Button savebtn=new Button("Save");
+        savebtn.setPrefWidth(100);
         //Create the listener
         savebtn.setOnAction(e->{
             trans=slider.getValue();
