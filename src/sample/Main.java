@@ -17,7 +17,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root= FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Photo Editor");
-        primaryStage.setScene(new Scene(root, 600, 600));
+        primaryStage.setScene(new Scene(root, 700, 700));
         File icon=new File(getClass().getResource("photoeditor.jpg").getPath());
         primaryStage.getIcons().add(SwingFXUtils.toFXImage(ImageIO.read(icon),null));
         primaryStage.show();

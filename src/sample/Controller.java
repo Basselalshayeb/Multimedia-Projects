@@ -1,5 +1,6 @@
 package sample;
 
+import com.sun.corba.se.impl.orbutil.graph.Graph;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -20,8 +21,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import javax.imageio.ImageIO;
@@ -29,9 +32,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collections;
-import java.util.ResourceBundle;
-import java.util.Vector;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class Controller implements Initializable
@@ -41,8 +42,11 @@ public class Controller implements Initializable
 
    public TextField brushsize;
 
+   //brush shape combo box
+    public ComboBox brushshape;
    //tools
-    public RadioButton pen,eraser;
+    public CheckBox pen,eraser,fill;
+
 
     //max width and height
    private  Double maxwidth=0.0,maxheight=0.0;
@@ -220,6 +224,7 @@ public class Controller implements Initializable
             //3- write it to the last canvas layer canvass
             canvss.elementAt(canvss.size()-1-1).getGraphicsContext2D().drawImage(paintedimg,0,0);
         }
+
         public void mouseListinerForPaint(MouseEvent e){
             Canvas test=(Canvas)e.getSource();
             GraphicsContext g=test.getGraphicsContext2D();
@@ -230,19 +235,125 @@ public class Controller implements Initializable
             }catch (NumberFormatException ex){
                 size=0;
             }
+            if(brushshape.getValue().equals("Pen"))
+                size=1;
+            if(fill.isSelected())
+                size=0;
             //-size/2 to make the mouse on the corner of the rect
             double x=e.getX()-size/2,y=e.getY()-size/2;
             //now paint mouser pos + size to make rectangle
             if(eraser.isSelected()){
                 g.clearRect(x,y,size,size);
-            }else if(pen.isSelected()){
+            }else if(pen.isSelected()) {
                 g.setFill(colorpicker.getValue());
-                g.fillOval(x,y,size,size);
-            }else{
-                //nothing happen
+                if (brushshape.getValue().equals("Pen") || brushshape.getValue().equals("Oval"))
+                    g.fillOval(x, y, size, size);
+                else if (brushshape.getValue().equals("Rect"))
+                    g.fillRect(x, y, size, size);
+            }
+            else if (fill.isSelected()){
+                //1- adjust the x and y
+                x=Math.max(0,x);
+                x=Math.min(x,canvss.elementAt(canvss.size()-1).getHeight());
+                y=Math.max(0,y);
+                y=Math.min(y,canvss.elementAt(canvss.size()-1).getWidth());
+                //2- get working image
+                Canvas finallbutlastone=mergeAllLayersButLast();
+                Image finallbutlastoneimg=finallbutlastone.snapshot(null,null);
+                //4- get result area
+                Canvas temp=new Canvas(finallbutlastone.getWidth(),finallbutlastone.getWidth());
+                temp.getGraphicsContext2D().drawImage(finallbutlastoneimg,0,0);
+                Image resultedimgfromfill=temp.snapshot(null,null);
+
+                //call the recursive function
+                PixelReader preader=finallbutlastoneimg.getPixelReader();
+                Color clickedcolor=preader.getColor((int)x,(int)y);
+                Color choosedcolor=colorpicker.getValue();
+                System.out.println(finallbutlastoneimg.getWidth()+" "+finallbutlastoneimg.getHeight());
+                fillTheResultedImage((int)x,(int)y,(int)finallbutlastoneimg.getWidth(),(int)finallbutlastoneimg.getHeight(),preader,((WritableImage) resultedimgfromfill).getPixelWriter(),clickedcolor,choosedcolor);
+                PixelWriter pwriter=((WritableImage) finallbutlastoneimg).getPixelWriter();
+                canvss.elementAt(canvss.size()-1-1).getGraphicsContext2D().drawImage(resultedimgfromfill,0,0);
+              /*  //bottom right
+                for(int i=(int)x;i<finallbutlastoneimg.getWidth();i++){
+                for(int j=(int)y;j<finallbutlastoneimg.getHeight();j++)
+                    {
+                        if(preader.getColor(i,j).equals(clickedcolor))
+                            pwriter.setColor(i,j,choosedcolor);
+                        else break;
+                    }
+                    if(!preader.getColor(i,0).equals(clickedcolor))
+                        break;
+                }
+                //top right
+                System.out.println(clickedcolor);
+                for(int i=(int)x;i<finallbutlastoneimg.getWidth();i++){
+                    for(int j=(int)y;j>=0;j--)
+                    {
+                        System.out.println("first"+preader.getColor(i,j));
+                        if(preader.getColor(i,j).equals(clickedcolor))
+                            pwriter.setColor(i,j,choosedcolor);
+                        else break;
+                    }
+                    if(!preader.getColor(i,0).equals(clickedcolor))
+                    break;
+                }*/
+                //top left
+                //canvss.elementAt(canvss.size()-1-1).getGraphicsContext2D().drawImage(finallbutlastoneimg,0,0);
+
             }
         }
+        HashMap<Pair<Integer,Integer>,Boolean> vis=new HashMap<>();
+        //function to fill the resulted image after fill
+    public void fillTheResultedImage(int x,int y,int maxx,int maxy,PixelReader preader,PixelWriter pwriter,Color clickedcolor,Color choosedcolor){
+           System.out.println(clickedcolor+" "+preader.getColor(x,y));
+           Stack<Pair<Integer,Integer>> st=new Stack<>();
+           st.push(new Pair<>(x,y));
+           while(!st.empty()){
+               Pair temp=st.pop();
+               x=(int)temp.getKey();
+               y=(int)temp.getValue();
+                System.out.println("poped "+temp);
+               if(preader.getColor((int)temp.getKey(),(int)temp.getValue()).equals(clickedcolor)){
+               System.out.println("fuck");
+                   pwriter.setColor(x,y,choosedcolor);
+               }
+               //x+1<=maxx &&
+               if(x+1<maxx-10 && !vis.containsKey(new Pair(x+1,y))){
+                   System.out.println(x+1+" "+y);
+                   vis.put(new Pair(x+1,y),true);
+                   st.push(new Pair(x+1,y));
+               }
+               //x-1<=maxx &&
+               if(x-1>10 && !vis.containsKey(new Pair(x-1,y))){
+                   vis.put(new Pair(x-1,y),true);
+                   st.push(new Pair(x-1,y));
+               }
+               //y+1<=maxx &&
+               if(y+1<maxy-10 && !vis.containsKey(new Pair(x,y+1))){
+                   vis.put(new Pair(x,y+1),true);
+                   st.push(new Pair(x,y+1));
+               }
+               //y-1<=maxx &&
+               if(y-1>10 && !vis.containsKey(new Pair(x,y-1))){
+                   vis.put(new Pair(x,y-1),true);
+                   st.push(new Pair(x,y-1));
+               }
+           }
 
+    }
+public Canvas mergeAllLayersButLast(){
+    Canvas res=new Canvas();
+    res.setWidth(maxwidth);
+    res.setHeight(maxheight);
+    for(int i=0;i<canvss.size()-1;i++) {
+        //get the image
+        SnapshotParameters params = new SnapshotParameters();
+        params.setFill(Color.TRANSPARENT);
+        Image img=canvss.elementAt(i).snapshot(params,null);
+        res.getGraphicsContext2D().drawImage(img,0,0 );
+    }
+    return res;
+}
     public void onSaveImageAs(ActionEvent event){
         try{
             //1- get the image from all the canvases
@@ -299,11 +410,19 @@ public class Controller implements Initializable
         public void onPenClick(ActionEvent e){
             if(pen.isSelected()){
                 eraser.setSelected(false);
+                fill.setSelected(false);
             }
         }
         public void onEraserClick(ActionEvent e){
             if(eraser.isSelected()){
                 pen.setSelected(false);
+                fill.setSelected(false);
+            }
+        }
+        public void onFillClick(){
+            if(fill.isSelected()){
+                pen.setSelected(false);
+                eraser.setSelected(false);
             }
         }
 
@@ -311,9 +430,13 @@ public class Controller implements Initializable
     public void initialize(URL location, ResourceBundle resources) {
             //initialize the first values
             pen.setSelected(true);
+
             colorpicker.setValue(Color.BLACK);
             brushsize.setText("22");
 
+            // initialize the bursh shapes
+        brushshape.getItems().addAll("Pen","Oval","Rect");
+        brushshape.setValue("Pen");
             //initialize the color system  combo box
         colorsystem.getItems().addAll("RGB","CMY","CMYK","Black and white","Gray scale");
         colorsystem.setValue("RGB");
