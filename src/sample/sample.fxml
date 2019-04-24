@@ -15,6 +15,8 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <BorderPane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <top>
       <VBox prefHeight="52.0" prefWidth="600.0" BorderPane.alignment="CENTER">
@@ -40,13 +42,13 @@
              <HBox prefHeight="26.0" prefWidth="300.0" style="-fx-background-color: #0E7C86;">
                  <TextField fx:id="brushsize" style="-fx-border-color: #243B53; -fx-opacity: 0.5;" />
                  <ColorPicker fx:id="colorpicker" prefHeight="25.0" prefWidth="101.0" style="-fx-background-color: #14919b87; -fx-opacity: 0.5;" />
-               <CheckBox fx:id="pen" alignment="CENTER" mnemonicParsing="false" onAction="#onPenClick" style="-fx-background-color: #14919B; -fx-opacity: 0.5; -fx-padding: 0 0 0 5;" textAlignment="CENTER" />
+               <Button fx:id="pen" alignment="CENTER" mnemonicParsing="false" onAction="#onPenClick" prefHeight="25.0" prefWidth="27.0" style="-fx-background-color: #14919B; -fx-opacity: 0.5; -fx-padding: 0 0 0 5;" textAlignment="CENTER" ></Button>
                  <ComboBox fx:id="brushshape" style="-fx-background-color: #14919b87; -fx-opacity: 0.5;" visibleRowCount="4" />
-               <CheckBox fx:id="eraser" mnemonicParsing="false" onAction="#onEraserClick" style="-fx-background-color: #14919B; -fx-opacity: 0.5; -fx-padding: 0 0 0 5;" text="eraser" />
-                 <CheckBox fx:id="fill" style="-fx-background-color: #14919B; -fx-opacity: 0.5;" onAction="#onFillClick" text="Fill ">
+               <Button fx:id="eraser" mnemonicParsing="false" onAction="#onEraserClick" style="-fx-background-color: #14919B; -fx-opacity: 0.5; -fx-padding: 0 0 0 5;" text="eraser" />
+                 <Button fx:id="fill" onAction="#onFillClick" style="-fx-background-color: #14919B; -fx-opacity: 0.5;" text="Fill ">
                   <padding>
                      <Insets left="5.0" />
-                  </padding></CheckBox>
+                  </padding></Button>
                  <Button onAction="#onConvertColorSystem" style="-fx-background-color: #14919b87; -fx-opacity: .5;" text="Convert" />
                  <ComboBox fx:id="colorsystem" style="-fx-background-color: #14919b87; -fx-opacity: 0.5;" visibleRowCount="4" />
 
@@ -54,6 +56,11 @@
          </children>
       </VBox>
    </top>
+    <right>
+        <VBox>
+            <Button fx:id="zoom"></Button>
+        </VBox>
+    </right>
     <center>
         <ScrollPane fx:id="scrollpane" style="-fx-background-color: #102A43;">
         <!--here we will add the canvass-->
