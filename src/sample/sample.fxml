@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Menu?>
@@ -15,8 +14,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
 <BorderPane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <top>
       <VBox prefHeight="52.0" prefWidth="600.0" BorderPane.alignment="CENTER">
@@ -39,13 +36,13 @@
                 </Menu>
               </menus>
             </MenuBar>
-             <HBox prefHeight="26.0" prefWidth="300.0" style="-fx-background-color: #0E7C86;">
-                 <TextField fx:id="brushsize" style="-fx-border-color: #243B53; -fx-opacity: 0.5;" />
-                 <ColorPicker fx:id="colorpicker" prefHeight="25.0" prefWidth="101.0" style="-fx-background-color: #14919b87; -fx-opacity: 0.5;" />
-               <Button fx:id="pen" alignment="CENTER" mnemonicParsing="false" onAction="#onPenClick" prefHeight="25.0" prefWidth="27.0" style="-fx-background-color: #14919B; -fx-opacity: 0.5; -fx-padding: 0 0 0 5;" textAlignment="CENTER" ></Button>
+             <HBox prefHeight="30.0" prefWidth="300.0" style="-fx-background-color: #0E7C86;">
+                 <TextField fx:id="brushsize" style="-fx-border-color: #243B53; -fx-opacity: 0.5;" prefHeight="31.0" />
+                 <ColorPicker fx:id="colorpicker" prefHeight="30.0" prefWidth="101.0" style="-fx-background-color: #14919b87; -fx-opacity: 0.5;" />
+               <Button fx:id="pen" alignment="CENTER" mnemonicParsing="false" onAction="#onPenClick" prefHeight="30.0" prefWidth="27.0" style="-fx-background-color: #14919B; -fx-opacity: 0.5; -fx-padding: 0 0 0 5;" textAlignment="CENTER" />
                  <ComboBox fx:id="brushshape" style="-fx-background-color: #14919b87; -fx-opacity: 0.5;" visibleRowCount="4" />
-               <Button fx:id="eraser" mnemonicParsing="false" onAction="#onEraserClick" style="-fx-background-color: #14919B; -fx-opacity: 0.5; -fx-padding: 0 0 0 5;" text="eraser" />
-                 <Button fx:id="fill" onAction="#onFillClick" style="-fx-background-color: #14919B; -fx-opacity: 0.5;" text="Fill ">
+               <Button fx:id="eraser" mnemonicParsing="false" onAction="#onEraserClick" prefHeight="30.0" prefWidth="27.0" style="-fx-background-color: #14919B; -fx-opacity: 0.5; -fx-padding: 0 0 0 5;" />
+                 <Button fx:id="fill" onAction="#onFillClick" prefHeight="30.0" prefWidth="27.0" style="-fx-background-color: #14919B; -fx-opacity: 0.5;">
                   <padding>
                      <Insets left="5.0" />
                   </padding></Button>
@@ -57,8 +54,8 @@
       </VBox>
    </top>
     <right>
-        <VBox>
-            <Button fx:id="zoom"></Button>
+        <VBox style="-fx-background-color: #0E7C86;" prefWidth="30.0">
+            <Button fx:id="zoom" onAction="#onZoomClick" style="-fx-background-color: #14919B; -fx-opacity: .5;" prefWidth="30.0" />
         </VBox>
     </right>
     <center>

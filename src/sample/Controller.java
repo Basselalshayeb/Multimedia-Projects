@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
@@ -500,6 +501,43 @@ public Canvas mergeAllLayersButLast(){
                 canvss.elementAt(canvss.size()-1-1).getGraphicsContext2D().drawImage(resultedimgfromfill,0,0);
             });
         }
+        boolean used=false;
+        public void onZoomClick(ActionEvent event){
+
+            double originalscale=canvss.elementAt(canvss.size()-1).getScaleX();
+            canvss.elementAt(canvss.size()-1).setOnMousePressed(e -> {
+                double factor=3;
+                if(canvss.elementAt(canvss.size()-1).getScaleX()!=originalscale)
+                    factor=1/factor;
+                double x=e.getSceneX(),y=e.getSceneY();
+                for(int i=0;i<canvss.size();i++) {
+
+
+                    //1- determine scale
+                    double oldScale = canvss.elementAt(i).getScaleX();
+                    double scale = oldScale * factor;
+                    double f = (scale / oldScale) - 1;
+                    //2- determine offset that we will have to move the node
+                    Bounds bounds = canvss.elementAt(i).localToScene(canvss.elementAt(i).getBoundsInLocal());
+                    double dx = (x - (bounds.getWidth() / 2 + bounds.getMinX()));
+                    double dy = (y - (bounds.getHeight() / 2 + bounds.getMinY()));
+                    if(canvss.elementAt(canvss.size()-1).getScaleX()==originalscale){
+                    canvss.elementAt(i).setTranslateX(canvss.elementAt(i).getTranslateX() - f * dx);
+                    canvss.elementAt(i).setTranslateY(canvss.elementAt(i).getTranslateY() - f * dy);
+                    }
+                    else{
+                        canvss.elementAt(i).setTranslateX(0);
+                    canvss.elementAt(i).setTranslateY(0);
+                    }
+                    canvss.elementAt(i).setScaleX(scale);
+                    canvss.elementAt(i).setScaleY(scale);
+
+                }
+            });
+            canvss.elementAt(canvss.size()-1).setOnMouseDragged(e -> {
+
+            });
+        }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -517,23 +555,28 @@ public Canvas mergeAllLayersButLast(){
         colorsystem.setValue("RGB");
 
        File f1=new File(getClass().getResource("pen.png").getPath()),f2=new File(getClass().getResource("eraser.png").getPath()),f3=new File(getClass().getResource("fill.png").getPath());
-        Image img1= null,img2=null,img3=null;
+       File f4=new File(getClass().getResource("zoom.png").getPath());
+        Image img1= null,img2=null,img3=null,img4=null;
         try {
             img1 = SwingFXUtils.toFXImage(ImageIO.read(f1),null);
-            img2=SwingFXUtils.toFXImage(ImageIO.read(f2),null);;
-            img3=SwingFXUtils.toFXImage(ImageIO.read(f3),null);;
+            img2=SwingFXUtils.toFXImage(ImageIO.read(f2),null);
+            img3=SwingFXUtils.toFXImage(ImageIO.read(f3),null);
+            img4=SwingFXUtils.toFXImage(ImageIO.read(f4),null);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ImageView imgv1=new ImageView(img1),imgv2=new ImageView(img2),imgv3=new ImageView(img3);
-        imgv1.setFitHeight(15);
-        imgv2.setFitHeight(15);
-        imgv3.setFitHeight(15);
-        imgv1.setFitWidth(15);
-        imgv2.setFitWidth(15);
-        imgv3.setFitWidth(15);
+        ImageView imgv1=new ImageView(img1),imgv2=new ImageView(img2),imgv3=new ImageView(img3),imgv4=new ImageView(img4);
+        imgv1.setFitHeight(19);
+        imgv2.setFitHeight(19);
+        imgv3.setFitHeight(19);
+        imgv4.setFitHeight(19);
+        imgv1.setFitWidth(19);
+        imgv2.setFitWidth(19);
+        imgv3.setFitWidth(19);
+        imgv4.setFitWidth(19);
         pen.setGraphic(imgv1);
         eraser.setGraphic(imgv2);
         fill.setGraphic(imgv3);
+        zoom.setGraphic(imgv4);
     }
 }
