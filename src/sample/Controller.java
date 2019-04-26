@@ -47,7 +47,7 @@ public class Controller implements Initializable
    //brush shape combo box
     public ComboBox brushshape;
    //tools
-    public Button pen,eraser,fill,zoom;
+    public Button pen,eraser,fill,zoom,text;
 
 
     //max width and height
@@ -88,9 +88,8 @@ public class Controller implements Initializable
             p.getChildren().addAll(canvss.elementAt(0),canvss.elementAt(1));
             scrollpane.setContent(p);
             canvss.elementAt(1).toFront();
-            //update the listener is set on click
-            //add the listener
-            //canvss.elementAt(1).setOnMouseDragged(this::mouseListinerForPaint);
+            //update the original scape
+            originalscale=canvss.elementAt(canvss.size()-1).getScaleX();
         }
         public void onAddAnotherLayer(ActionEvent e) throws IOException {
             FileChooser filechooser=new FileChooser();
@@ -123,6 +122,8 @@ public class Controller implements Initializable
             scrollpane.setContent(p);
             //add the painting layer to the canvss
             canvss.add(paintinglayer);
+            //update the original scape
+            originalscale=canvss.elementAt(canvss.size()-1).getScaleX();
         }
         //collor system controller
         public void onConvertColorSystem(ActionEvent e){
@@ -501,16 +502,17 @@ public Canvas mergeAllLayersButLast(){
                 canvss.elementAt(canvss.size()-1-1).getGraphicsContext2D().drawImage(resultedimgfromfill,0,0);
             });
         }
-        boolean used=false;
+    double originalscale;
         public void onZoomClick(ActionEvent event){
 
-            double originalscale=canvss.elementAt(canvss.size()-1).getScaleX();
             canvss.elementAt(canvss.size()-1).setOnMousePressed(e -> {
+
                 double factor=3;
-                if(canvss.elementAt(canvss.size()-1).getScaleX()!=originalscale)
+                if(canvss.elementAt(canvss.size()-1).getScaleX()!=originalscale){
                     factor=1/factor;
+                }
                 double x=e.getSceneX(),y=e.getSceneY();
-                for(int i=0;i<canvss.size();i++) {
+                for(int i=0;i<canvss.size();i++){
 
 
                     //1- determine scale
@@ -521,7 +523,7 @@ public Canvas mergeAllLayersButLast(){
                     Bounds bounds = canvss.elementAt(i).localToScene(canvss.elementAt(i).getBoundsInLocal());
                     double dx = (x - (bounds.getWidth() / 2 + bounds.getMinX()));
                     double dy = (y - (bounds.getHeight() / 2 + bounds.getMinY()));
-                    if(canvss.elementAt(canvss.size()-1).getScaleX()==originalscale){
+                    if(canvss.elementAt(canvss.size()-1).getScaleX()==originalscale ){
                     canvss.elementAt(i).setTranslateX(canvss.elementAt(i).getTranslateX() - f * dx);
                     canvss.elementAt(i).setTranslateY(canvss.elementAt(i).getTranslateY() - f * dy);
                     }
@@ -538,7 +540,18 @@ public Canvas mergeAllLayersButLast(){
 
             });
         }
+    public void onTextClick(ActionEvent event){
+            canvss.elementAt(canvss.size()-1).setOnMousePressed(e -> {
+                double x=e.getX(),y=e.getY();
+                String text=EnterTransparency.getText();
+                GraphicsContext g=canvss.elementAt(canvss.size()-1).getGraphicsContext2D();
+                g.setFill(colorpicker.getValue());
+                g.fillText(text,x,y);
+            });
+            canvss.elementAt(canvss.size()-1).setOnMouseDragged(e -> {
 
+            });
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
             //initialize the first values
@@ -556,27 +569,32 @@ public Canvas mergeAllLayersButLast(){
 
        File f1=new File(getClass().getResource("pen.png").getPath()),f2=new File(getClass().getResource("eraser.png").getPath()),f3=new File(getClass().getResource("fill.png").getPath());
        File f4=new File(getClass().getResource("zoom.png").getPath());
-        Image img1= null,img2=null,img3=null,img4=null;
+       File f5=new File(getClass().getResource("text.png").getPath());
+        Image img1= null,img2=null,img3=null,img4=null,img5=null;
         try {
             img1 = SwingFXUtils.toFXImage(ImageIO.read(f1),null);
             img2=SwingFXUtils.toFXImage(ImageIO.read(f2),null);
             img3=SwingFXUtils.toFXImage(ImageIO.read(f3),null);
             img4=SwingFXUtils.toFXImage(ImageIO.read(f4),null);
+            img5=SwingFXUtils.toFXImage(ImageIO.read(f5),null);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ImageView imgv1=new ImageView(img1),imgv2=new ImageView(img2),imgv3=new ImageView(img3),imgv4=new ImageView(img4);
+        ImageView imgv1=new ImageView(img1),imgv2=new ImageView(img2),imgv3=new ImageView(img3),imgv4=new ImageView(img4),imgv5=new ImageView(img5);
         imgv1.setFitHeight(19);
         imgv2.setFitHeight(19);
         imgv3.setFitHeight(19);
         imgv4.setFitHeight(19);
+        imgv5.setFitHeight(19);
         imgv1.setFitWidth(19);
         imgv2.setFitWidth(19);
         imgv3.setFitWidth(19);
         imgv4.setFitWidth(19);
+        imgv5.setFitWidth(19);
         pen.setGraphic(imgv1);
         eraser.setGraphic(imgv2);
         fill.setGraphic(imgv3);
         zoom.setGraphic(imgv4);
+        text.setGraphic(imgv5);
     }
 }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.ComboBox?>
@@ -18,9 +17,9 @@
    <top>
       <VBox prefHeight="52.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <MenuBar style="-fx-background-color: #14919B;">
+            <MenuBar style="-fx-background-color: #486581;">
               <menus>
-                <Menu mnemonicParsing="false" style="fx_background_color: #044E54;" text="File">
+                <Menu mnemonicParsing="false"  text="File">
                   <items>
                         <MenuItem mnemonicParsing="false" onAction="#onLoadImage" text="Load Image" />
                       <MenuItem mnemonicParsing="false" onAction="#onAddAnotherLayer" text="Add Another Layer" />
@@ -36,26 +35,24 @@
                 </Menu>
               </menus>
             </MenuBar>
-             <HBox prefHeight="30.0" prefWidth="300.0" style="-fx-background-color: #0E7C86;">
-                 <TextField fx:id="brushsize" style="-fx-border-color: #243B53; -fx-opacity: 0.5;" prefHeight="31.0" />
-                 <ColorPicker fx:id="colorpicker" prefHeight="30.0" prefWidth="101.0" style="-fx-background-color: #14919b87; -fx-opacity: 0.5;" />
-               <Button fx:id="pen" alignment="CENTER" mnemonicParsing="false" onAction="#onPenClick" prefHeight="30.0" prefWidth="27.0" style="-fx-background-color: #14919B; -fx-opacity: 0.5; -fx-padding: 0 0 0 5;" textAlignment="CENTER" />
-                 <ComboBox fx:id="brushshape" style="-fx-background-color: #14919b87; -fx-opacity: 0.5;" visibleRowCount="4" />
-               <Button fx:id="eraser" mnemonicParsing="false" onAction="#onEraserClick" prefHeight="30.0" prefWidth="27.0" style="-fx-background-color: #14919B; -fx-opacity: 0.5; -fx-padding: 0 0 0 5;" />
-                 <Button fx:id="fill" onAction="#onFillClick" prefHeight="30.0" prefWidth="27.0" style="-fx-background-color: #14919B; -fx-opacity: 0.5;">
-                  <padding>
-                     <Insets left="5.0" />
-                  </padding></Button>
-                 <Button onAction="#onConvertColorSystem" style="-fx-background-color: #14919b87; -fx-opacity: .5;" text="Convert" />
-                 <ComboBox fx:id="colorsystem" style="-fx-background-color: #14919b87; -fx-opacity: 0.5;" visibleRowCount="4" />
+             <HBox prefHeight="30.0" prefWidth="300.0" style="-fx-background-color: #486581;">
+                 <TextField fx:id="brushsize" prefHeight="30.0" style="-fx-opacity: 1;" />
+                 <ColorPicker fx:id="colorpicker" prefHeight="30.0" prefWidth="101.0" style="-fx-background-color: #14919B; -fx-opacity: 1;" />
+                 <ComboBox fx:id="brushshape" style="-fx-background-color: #14919B; -fx-opacity: 1;" visibleRowCount="4" />
+                 <Button fx:id="pen" alignment="CENTER" mnemonicParsing="false" onAction="#onPenClick" prefHeight="30.0" prefWidth="27.0" style="-fx-background-color: #14919B; -fx-opacity: 1;" textAlignment="CENTER" />
+                 <Button fx:id="eraser" mnemonicParsing="false" onAction="#onEraserClick" prefHeight="30.0" prefWidth="27.0" style="-fx-background-color: #14919B; -fx-opacity: 1;" />
+                 <Button fx:id="fill" onAction="#onFillClick" prefHeight="30.0" prefWidth="27.0" style="-fx-background-color: #14919B; -fx-opacity: 1;" />
+                 <Button fx:id="zoom" onAction="#onZoomClick" prefHeight="30.0" prefWidth="28.0" style="-fx-background-color: #14919B; -fx-opacity: 1;" />
+                 <Button fx:id="text" onAction="#onTextClick" prefHeight="30.0" prefWidth="28.0" style="-fx-background-color: #14919B; -fx-opacity: 1;" />
+                 <Button onAction="#onConvertColorSystem" prefHeight="30.0" style="-fx-background-color: #14919B; -fx-opacity: 1;" text="Convert" />
+                 <ComboBox fx:id="colorsystem" style="-fx-background-color: #14919B; -fx-opacity: 1;" visibleRowCount="4" />
 
              </HBox>
          </children>
       </VBox>
    </top>
     <right>
-        <VBox style="-fx-background-color: #0E7C86;" prefWidth="30.0">
-            <Button fx:id="zoom" onAction="#onZoomClick" style="-fx-background-color: #14919B; -fx-opacity: .5;" prefWidth="30.0" />
+        <VBox prefWidth="30.0" style="-fx-background-color: #0E7C86;">
         </VBox>
     </right>
     <center>
